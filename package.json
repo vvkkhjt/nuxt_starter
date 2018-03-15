@@ -1,0 +1,27 @@
+{
+    "name": "starter",
+    "version": "1.0.0",
+    "description": "Nuxt.js project",
+    "author": "hujuntao <hujuntao@digisky.com>",
+    "private": true,
+    "config": {
+        "nuxt": {
+            "host": "0.0.0.0",
+            "port": "4000"
+        }
+    },
+    "scripts": {
+        "dev": "nuxt",
+        "build": "nuxt build",
+        "start": "nuxt start",
+        "generate": "nuxt generate"
+    },
+    "dependencies": {
+        "axios": "^0.18.0",
+        "nuxt": "^1.0.0",
+        "element-ui": "^2.1.0"
+    },
+    "devDependencies": {
+
+    }
+}
