@@ -46,6 +46,13 @@ export default {
         // })
     },
     mounted() {
+        // let options ={
+        //     method: 'post',
+        //     url: 'http://demand.test.digi-sky.com/api/user/isAdmin',
+        // }
+        // this.$http(options).then(res=>{
+        //     console.log(res)
+        // })
     }
 };
 </script>
