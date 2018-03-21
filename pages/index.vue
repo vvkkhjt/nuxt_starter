@@ -25,32 +25,19 @@
 
 <script>
 import AppLogo from "~/components/AppLogo.vue";
-import axios from "~/plugins/axios"
 export default {
     components: {
         AppLogo
     },
     async asyncData(context) {
-        // let options = {
-        //     method: 'post',
-        //     url: 'user/isAdmin',
-        //     params: {
-        //         username: 'hjt'
-        //     },
-        //     context: context
-        // }
-        // axios(options).then(res=>{
+        // let params = {}
+        // context.$axios.post(params).then(res=>{
         //     console.log(res)
-        // }).catch(e=>{
-        //     console.log(e)
         // })
     },
     mounted() {
-        // let options ={
-        //     method: 'post',
-        //     url: 'http://demand.test.digi-sky.com/api/user/isAdmin',
-        // }
-        // this.$http(options).then(res=>{
+        // let params = {}
+        // this.$axios.post(params).then(res=>{
         //     console.log(res)
         // })
     }
