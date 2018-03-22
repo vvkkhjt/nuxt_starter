@@ -15,7 +15,7 @@ module.exports = merge(baseConfig,{
         // browserBaseURL: '',
         //自动拦截失败的请求，并重新请求次数,设置true默认3次,retries设置次数
         // retry:true,
-        // retry: { retries: 3 },
+        retry: { retries: 1 },
     },
     //设置代理
     proxy:  {
