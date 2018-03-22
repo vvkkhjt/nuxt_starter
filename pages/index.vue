@@ -37,7 +37,7 @@ export default {
     },
     mounted() {
         // let params = {}
-        // this.$axios.post(params).then(res=>{
+        // this.$axios.post('/api/user/loginQWX',params).then(res=>{
         //     console.log(res)
         // })
     }
