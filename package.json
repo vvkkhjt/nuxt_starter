@@ -12,16 +12,17 @@
     },
     "scripts": {
         "dev": "nuxt -c nuxt.dev.config.js",
-        "build": "set NzODE_ENV=production&&nuxt build -c nuxt.prod.config.js",
-        "start": "set NODE_ENV=production&&nuxt start -c nuxt.prod.config.js",
-        "generate": "set NODE_ENV=production&&nuxt generate -c nuxt.prod.config.js"
+        "build": "nuxt build -c nuxt.prod.config.js",
+        "start": "nuxt start -c nuxt.prod.config.js",
+        "generate": "nuxt generate -c nuxt.prod.config.js"
     },
     "dependencies": {
-        "nuxt": "^1.0.0",
-        "element-ui": "^2.1.0"
+        "element-ui": "^2.1.0",
+        "nuxt": "^1.0.0"
     },
     "devDependencies": {
         "@nuxtjs/axios": "^5.1.1",
+        "@nuxtjs/component-cache": "^1.1.1",
         "@nuxtjs/proxy": "^1.1.4",
         "axios-retry": "3.0.2",
         "webpack-merge": "^4.1.2"
