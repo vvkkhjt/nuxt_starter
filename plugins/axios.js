@@ -51,10 +51,9 @@ import { Message, MessageBox } from 'element-ui';
 export default function ({ $axios, headers, redirect }) {
     //设置headers
     // headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
-    $axios.onRequest(({method,data={}}) => {
-        if (method === 'post') {
-            data = qs.stringify(data);
-        }
+    $axios.onRequest((config) => {
+        config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
+        config.data = qs.stringify(config.data)
     })
 
     $axios.onResponse(response => {

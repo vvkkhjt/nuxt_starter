@@ -37,7 +37,9 @@ module.exports = {
     modules: ['@nuxtjs/axios'],
     css: ['~/assets/css/main.css','element-ui/lib/theme-chalk/index.css'],
     build: {
+        //依赖的第三方模块
         vendor: ['axios','element-ui']
     },
+    //vue使用的第三方库 vue use之类的
     plugins: [{src:'~/plugins/axios',ssr: false},'~/plugins/element-ui'],
 }
