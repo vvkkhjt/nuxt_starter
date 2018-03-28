@@ -18,7 +18,8 @@
     },
     "dependencies": {
         "element-ui": "^2.1.0",
-        "nuxt": "^1.0.0"
+        "nuxt": "^1.0.0",
+        "vuex-persistedstate": "^2.5.1"
     },
     "devDependencies": {
         "@nuxtjs/axios": "^5.1.1",

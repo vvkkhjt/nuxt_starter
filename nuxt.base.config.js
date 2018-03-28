@@ -41,5 +41,9 @@ module.exports = {
         vendor: ['axios','element-ui']
     },
     //vue使用的第三方库 vue use之类的
-    plugins: [{src:'~/plugins/axios',ssr: false},'~/plugins/element-ui'],
+    plugins: [
+        { src: '~/plugins/axios', ssr: false},
+        { src: '~/plugins/element-ui', ssr: true},
+        { src: '~/plugins/localStorage', ssr: false },
+    ],
 }
