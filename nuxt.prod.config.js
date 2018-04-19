@@ -8,9 +8,15 @@ module.exports = merge(baseConfig,{
         interval: 2,
         retry: { retries: 1 },
     },
+    // build: {
+    //     extend (config) {
+    //         config.output.publicPath = `/static/`;
+    //     },
+    //     publicPath: 'static'
+    // },
     axios: {
         credentials: true,
-        baseURL: 'http://sso.dev.digi-sky.com'
+        baseURL: '/'
     },
     //引入nuxt/component-cache 缓存组件提高性能
     // modules: [['@nuxtjs/component-cache', {
