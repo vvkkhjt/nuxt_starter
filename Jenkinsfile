@@ -18,7 +18,7 @@ node('centos7') {
             docker.build(imagesName)
         }
     }
-    stage('Image Push'){
+    stage('Image Push to Dev'){
         sh "docker push ${imagesName}"
     }
 }
