@@ -1,3 +1,5 @@
+def projectName = 'conference'
+
 def gitCommit() {
     sh "git rev-parse --short HEAD > GIT_COMMIT"
     def gitCommit = readFile('GIT_COMMIT').trim()
@@ -9,9 +11,9 @@ def getVersion() {
     return version
 }
 node('centos7') {
-    def imagesName = "harbor.test.digi-sky.com/fed/conference:${BUILD_NUMBER}"
+    def imagesName = "harbor.test.digi-sky.com/fed/${projectName}:latest"
     stage('get Code') {
-        git branch: 'dev', credentialsId: '51f7b7a8-c09e-46fc-bbbc-818bef1b39e0', url: 'git@git.ppgame.com:fed/conference.git'
+        git branch: 'dev', credentialsId: '51f7b7a8-c09e-46fc-bbbc-818bef1b39e0', url: "git@git.ppgame.com:fed/${projectName}.git"
     }
     stage('Image Build'){
         withDockerRegistry([credentialsId: 'a6740d9e-6dd6-4544-93ca-985319e4946d', url: 'https://harbor.test.digi-sky.com']) {
@@ -29,7 +31,7 @@ timeout(time:1, unit:'DAYS') {
 }
 
 node('centos7'){
-    def imagesNameProd = "ccr.ccs.tencentyun.com/digisky-plat/conference-home:${getVersion()}-git${gitCommit()}.${BUILD_NUMBER}"
+    def imagesNameProd = "ccr.ccs.tencentyun.com/digisky-plat/${projectName}-home:${getVersion()}-git${gitCommit()}.${BUILD_NUMBER}"
     stage('Tag Image'){
         sh "docker tag ${imagesName} ${imagesNameProd}"
     }
