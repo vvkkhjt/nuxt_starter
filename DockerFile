@@ -1,5 +1,5 @@
 #基础镜像
-FROM hub.digi-sky.com/plat/fed/nodejs:8.9.4
+FROM harbor.test.digi-sky.com/base/node:8.9.4
 #工作文件夹
 WORKDIR /data/webapps
 #打包添加的文件
