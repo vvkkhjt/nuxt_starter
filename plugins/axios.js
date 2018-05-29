@@ -13,16 +13,16 @@ export default function ({ $axios, headers, redirect }) {
         const res = response.data;
         if (res.code < 0) {
             // -211:无效的uid或token; -111:未登录;
-            if (res.code === -111) {
+            if (res.code === -111 || res.code === -201 || res.code === -203 || res.code === -214) {
                 if(process.server){
-                    redirect('/login')
+                    redirect('http://sso.digisky.com/login')
                 }else{
                     MessageBox.alert('登录验证失效，请重新登录', '消息提示', {
                         confirmButtonText: '确认',
                         type: 'warning'
                     }).then(() => {
                         sessionStorage.removeItem('user');
-                        window.location.href = '/login';
+                        window.location.href = 'http://sso.digisky.com/login';
                     }).catch(() => {
                         sessionStorage.removeItem('user');
                         location.reload();
