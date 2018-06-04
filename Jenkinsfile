@@ -1,4 +1,6 @@
 def projectName = 'conference'
+def testHarbor = 'harbor.test.digi-sky.com/fed/'
+def prodHarbor = 'ccr.ccs.tencentyun.com/digisky-plat/'
 
 def gitCommit() {
     sh "git rev-parse --short HEAD > GIT_COMMIT"
@@ -13,7 +15,7 @@ def getVersion() {
 def imagesName = ""
 def imagesNameProd = ""
 node('centos7') {
-    imagesName = "harbor.test.digi-sky.com/fed/${projectName}:latest"
+    imagesName = "${testHarbor}${projectName}:latest"
     stage('get Code') {
         git branch: 'dev', credentialsId: '51f7b7a8-c09e-46fc-bbbc-818bef1b39e0', url: "git@git.ppgame.com:fed/${projectName}.git"
     }
@@ -36,7 +38,7 @@ timeout(time:1, unit:'DAYS') {
 }
 
 node('centos7'){
-    imagesNameProd = "ccr.ccs.tencentyun.com/digisky-plat/${projectName}-home:${getVersion()}-git${gitCommit()}.${BUILD_NUMBER}"
+    imagesNameProd = "${prodHarbor}${projectName}-home:${getVersion()}-git${gitCommit()}.${BUILD_NUMBER}"
     stage('Tag Image'){
         sh "docker tag ${imagesName} ${imagesNameProd}"
     }
