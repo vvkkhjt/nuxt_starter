@@ -1,52 +1,42 @@
-def projectName = 'conference'
-def testHarbor = 'harbor.test.digi-sky.com/fed/'
-def prodHarbor = 'ccr.ccs.tencentyun.com/digisky-plat/'
+#!groovy
+@Library('jk-pipeline-library') _
 
-def gitCommit() {
-    sh "git rev-parse --short HEAD > GIT_COMMIT"
-    def gitCommit = readFile('GIT_COMMIT').trim()
-    sh "rm -f GIT_COMMIT"
-    return gitCommit
-}
-def getVersion() {
-    def version = readFile('VERSION').trim()
-    return version
-}
-def imagesName = ""
-def imagesNameProd = ""
-node('centos7') {
-    imagesName = "${testHarbor}${projectName}:latest"
-    stage('get Code') {
-        git branch: 'dev', credentialsId: '51f7b7a8-c09e-46fc-bbbc-818bef1b39e0', url: "git@git.ppgame.com:fed/${projectName}.git"
+def registry = 'hub.digi-sky.com'
+def registryCCR = 'ccr.ccs.tencentyun.com'
+
+def namespace = 'digisky-plat'
+def artifactId = 'oa_kpi-fed'
+
+jkNode(label: "java") {
+
+    jkStage(name: 'Checkout Code') {
+        checkout scm
+        sh "git clean -fdx"
+        sh "git reset --hard"
     }
-    stage('Image Build'){
-        withDockerRegistry([credentialsId: 'a6740d9e-6dd6-4544-93ca-985319e4946d', url: 'https://harbor.test.digi-sky.com']) {
-            docker.build(imagesName)
+
+    jkGetPipelineVersion()
+    jkSetBuildInfo()
+
+    jkStage(name: 'build') {
+      jkabsTask(
+        'task.id': 'semver',
+        'artifact.version': "${env.PIPELINE_VERSION}"
+      )
+    }
+
+    jkStage(name: 'imgbuild', container: 'dind') {
+        docker.withRegistry("https://${registry}", 'imgbuild-harbor') {
+          imgName = docker.build("${namespace}/${artifactId}:${env.PIPELINE_VERSION}")
+          imgName.push()
         }
     }
-    stage('Image Push to Dev'){
-        sh "docker push ${imagesName}"
-    }
-    stage('Upgrade Image Dev'){
-        rancher confirm: true, credentialId: '58bcf8bd-67eb-4284-9c21-a5b19395ba7e', endpoint: 'https://rancher.test.digi-sky.com/v2-beta', environmentId: '1a5', environments: '', image: imagesName, ports: '', service: "${projectName}/${projectName}-fed", timeout: 600
-    }
 }
 
-stage 'deployment'
-timeout(time:1, unit:'DAYS') {
-    input 'Do you approve deployment?'
-}
-
-node('centos7'){
-    imagesNameProd = "${prodHarbor}${projectName}-home:${getVersion()}-git${gitCommit()}.${BUILD_NUMBER}"
-    stage('Tag Image'){
-        sh "docker tag ${imagesName} ${imagesNameProd}"
+jkStage(name: "sync image to ccr?", manual: true) {
+  jkNode(label: "java", container: 'dind') {
+    docker.withRegistry("https://${registryCCR}", 'imgbuild-ccr') {
+      imgName.push()
     }
-    stage('Push Image to Prod'){
-        sh "docker push ${imagesNameProd}"
-    }
-    stage('Delete Images'){
-        sh "docker rmi ${imagesNameProd}"
-        sh "docker rmi ${imagesName}"
-    }
+  }
 }
