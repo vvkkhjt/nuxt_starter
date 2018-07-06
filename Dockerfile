@@ -1,4 +1,4 @@
-FROM harbor.test.digi-sky.com/base/node:8.9.4
+FROM hub.digi-sky.com/base/nodejs:8.9.4
 
 LABEL org="dsky" \
   meta.dsky.team="plat" \
