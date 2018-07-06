@@ -27,7 +27,8 @@ jkNode(label: "java") {
 
     jkStage(name: 'imgbuild', container: 'dind') {
         docker.withRegistry("https://${registry}", 'imgbuild-harbor') {
-          imgName = docker.build("${namespace}/${artifactId}:${env.PIPELINE_VERSION}")
+          imgInner = "${namespace}/${artifactId}:${env.PIPELINE_VERSION}"
+          imgName = docker.build(imgInner)
           imgName.push()
         }
     }
@@ -35,6 +36,10 @@ jkNode(label: "java") {
 
 jkStage(name: "sync image to ccr?", manual: true) {
   jkNode(label: "java", container: 'dind') {
+    docker.withRegistry("https://${registry}", 'imgbuild-harbor') {
+      imgName.pull()
+      sh "docker tag ${registry}/${imgInner} ${imgInner}"
+    }
     docker.withRegistry("https://${registryCCR}", 'imgbuild-ccr') {
       imgName.push()
     }
