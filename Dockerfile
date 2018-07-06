@@ -9,4 +9,5 @@ RUN yarn install && npm run build
 
 #CMD 指令指定容器启动时需要运行的程序
 RUN chmod 777 run.sh
+EXPOSE 8000
 CMD ["./run.sh"]
