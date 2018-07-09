@@ -1,2 +1,2 @@
-*.vue -crlf
-*.sh -lf
+*.vue eof=crlf
+*.sh eof=lf
