@@ -12,4 +12,5 @@ RUN cd /data/webapps && yarn install && npm run build
 EXPOSE 8080
 RUN chmod 777 run.sh
 WORKDIR /data/webapps
+
 CMD ["/data/webapps/run.sh"]
