@@ -1,2 +1,2 @@
-*.vue eof=crlf
-*.sh eof=lf
+*.vue eol=crlf
+*.sh eol=lf
