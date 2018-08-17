@@ -8,28 +8,26 @@ def qaNamespace = 'qa-plat-docs'
 def prodDeploymentname = 'docs-fed'
 def prodNamespace = 'plat-docs'
 
-jkStage(name: "upgrade Docs app in qaEnv") {
-  jkNode(label: "kubectl") {
-    withKubeConfig(caCertificate: '', credentialsId: 'ccs-plat-inner-ol', serverUrl: 'https://118.24.103.219/k8s/clusters/c-sxsck') {
-      jkabsTask(
-        'task.id': 'kubectl_set',
-        'image.name': "${namespace}/${artifactId}",
-        'k8s.deploymentname': "${qaDeploymentname}",
-        'k8s.deployment.namespace': "${qaNamespace}"
-      )
-    }
-  }
+skySyncImg(script: this,
+    imgName: "${namespace}/${artifactId}:${env.PIPELINE_VERSION}")
+
+skyDeploy(script: this,
+    stageName: "Deploy ${qaDeploymentname} app in qaEnv",
+    credInfo: "ccs-plat-inner-ol@ccs-plat-inner-ol",
+    manual: false) {
+    jkabsTask('task.id': 'kubectl_set',
+            'image.name': "${namespace}/${artifactId}",
+            'build.pipeline.version': "${env.PIPELINE_VERSION}",
+            'k8s.deploymentname': "${qaDeploymentname}",
+            'k8s.deployment.namespace': "${qaNamespace}")
 }
 
-jkStage(name: "upgrade Docs app in prodEnv?", manual: true) {
-  jkNode(label: "kubectl") {
-    withKubeConfig(caCertificate: '', credentialsId: 'ccs-plat-inner-ol', serverUrl: 'https://118.24.103.219/k8s/clusters/c-sxsck') {
-      jkabsTask(
-        'task.id': 'kubectl_set',
-        'image.name': "${namespace}/${artifactId}",
-        'k8s.deploymentname': "${prodDeploymentname}",
-        'k8s.deployment.namespace': "${prodNamespace}"
-      )
-    }
-  }
+skyDeploy(script: this,
+    stageName: "Deploy ${prodDeploymentname} app in prodEnv?",
+    credInfo: "ccs-plat-prod-ol@ccs-plat-prod-ol") {
+    jkabsTask('task.id': 'kubectl_set',
+            'image.name': "${namespace}/${artifactId}",
+            'build.pipeline.version': "${env.PIPELINE_VERSION}",
+            'k8s.deploymentname': "${prodDeploymentname}",
+            'k8s.deployment.namespace': "${prodNamespace}")
 }

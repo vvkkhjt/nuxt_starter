@@ -1,17 +1,24 @@
 #!groovy
 @Library('jk-pipeline-library') _
 
-namespace = 'digisky-plat'
-artifactId = 'docs-fed'
+def namespace = 'digisky-plat'
+def artifactId = 'conference-fed'
 
-jkBuild(script: this) {
-    kubconfig = [
-        'credId': 'plat-test-ol',
-        'serverUrl': 'https://rancher-dev.digisky.com/k8s/clusters/c-jp5q9'
-    ]
+def imgHubQA = "hub.digi-sky.com"
+def devDeploymentname = "conference-fed"
+def devNamespace = "plat-conference"
 
-    kubectl_set = [
-        'deploymentname': 'docs-fed',
-        'namespace': 'plat-docs'
-    ]
+skyBuild(script: this) {
+  imgName = "${namespace}/${artifactId}"
+}
+
+skyDeploy(script: this,
+    stageName: "Deploy TestEnv",
+    credInfo: "plat-test-ol@plat-dev-121") {
+    jkabsTask('task.id': 'kubectl_set',
+            'registry.url': "${imgHubQA}",
+            'image.name': "${namespace}/${artifactId}",
+            'build.pipeline.version': "${env.PIPELINE_VERSION}",
+            'k8s.deploymentname': "${devDeploymentname}",
+            'k8s.deployment.namespace': "${devNamespace}")
 }
