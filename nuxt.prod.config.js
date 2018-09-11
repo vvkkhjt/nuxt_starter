@@ -4,17 +4,17 @@ const baseConfig = require('./nuxt.base.config')
 module.exports = merge(baseConfig,{
     //打包的文件路径
     generate: {
-        dir: './dist/home',
+        // dir: './dist/home',
         interval: 2,
         retry: { retries: 1 },
     },
-    //打包构建静态文件输出路径
-    // build: {
-    //     extend (config) {
-    //         config.output.publicPath = `/static/`;
-    //     },
-    //     publicPath: 'static'
-    // },
+    打包构建静态文件输出路径
+    build: {
+        extend (config) {
+            config.output.publicPath = `/static/`;
+        },
+        publicPath: 'static'
+    },
     //访问路径
     // router: {
     //     base: '/m/'

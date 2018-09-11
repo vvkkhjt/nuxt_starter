@@ -29,6 +29,10 @@ module.exports = {
                 type: 'image/x-icon',
                 href: '/favicon.ico'
             }
+        ],
+        script: [
+            { src: 'https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js' },
+            { innerHTML: 'if (typeof module === "object") {window.jQuery = window.$ = module.exports;};', type: 'text/javascript' }
         ]
     },
     //配置后台渲染或者spa模式
