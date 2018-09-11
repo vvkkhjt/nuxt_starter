@@ -8,7 +8,7 @@ module.exports = merge(baseConfig,{
         interval: 2,
         retry: { retries: 1 },
     },
-    打包构建静态文件输出路径
+    //打包构建静态文件输出路径
     build: {
         extend (config) {
             config.output.publicPath = `/static/`;
