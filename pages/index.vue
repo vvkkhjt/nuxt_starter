@@ -18,7 +18,7 @@
           target="_blank"
           class="button--grey">GitHub</a>
       </div>
-      <nuxt-link to="/ceshi">ceshi</nuxt-link>
+      <nuxt-link to="/about">about</nuxt-link>
     </div>
   </section>
 </template>
