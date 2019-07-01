@@ -1,12 +1,12 @@
 #!groovy
 @Library('jk-pipeline-library') _
 
-def namespace = 'digisky-plat'
-def artifactId = 'conference-fed'
+def namespace = 'namespace'
+def artifactId = 'test-fed'
 
-def imgHubQA = "hub.digi-sky.com"
-def devDeploymentname = "conference-fed"
-def devNamespace = "plat-conference"
+def imgHubQA = "hub.docker.com"
+def devDeploymentname = "test-fed"
+def devNamespace = "plat-test"
 
 skyBuild(script: this) {
   imgName = "${namespace}/${artifactId}"

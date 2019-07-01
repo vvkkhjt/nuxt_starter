@@ -19,6 +19,8 @@
           class="button--grey">GitHub</a>
       </div>
       <nuxt-link to="/about">about</nuxt-link>
+      <br>
+      <nuxt-link to="/user/15">user</nuxt-link>
     </div>
   </section>
 </template>

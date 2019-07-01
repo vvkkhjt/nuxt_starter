@@ -1,12 +1,12 @@
 #!groovy
 @Library('jk-pipeline-library') _
 
-def namespace = 'digisky-plat'
-def artifactId = 'docs-fed'
-def qaDeploymentname = 'docs-fed'
-def qaNamespace = 'qa-plat-docs'
-def prodDeploymentname = 'docs-fed'
-def prodNamespace = 'plat-docs'
+def namespace = 'namespace'
+def artifactId = 'test-fed'
+def qaDeploymentname = 'test-fed'
+def qaNamespace = 'qa-plat-test'
+def prodDeploymentname = 'test-fed'
+def prodNamespace = 'plat-test'
 
 skySyncImg(script: this,
     imgName: "${namespace}/${artifactId}:${env.PIPELINE_VERSION}")

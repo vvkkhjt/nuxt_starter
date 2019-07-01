@@ -20,7 +20,7 @@ module.exports = merge(baseConfig,{
     //设置代理
     proxy:  {
         '/api': {
-            target: 'http://sso.dev.digi-sky.com',
+            target: 'http://xxx.com',
             changeOrigin: true,
             pathRewrite: {
             '^/api' : '/api'
