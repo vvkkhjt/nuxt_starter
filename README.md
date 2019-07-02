@@ -1,5 +1,3 @@
-# import git
-> https://username:password@git.ppgame.com/fed-frame/nuxt_starter.git
 # normal
 
 > Nuxt.js project normal template
