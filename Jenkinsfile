@@ -1,24 +1,42 @@
 #!groovy
-@Library('jk-pipeline-library') _
-
-def namespace = 'namespace'
-def artifactId = 'test-fed'
-
 def imgHubQA = "hub.docker.com"
-def devDeploymentname = "test-fed"
-def devNamespace = "plat-test"
+def imgNamespace = 'imgNamespace'
+def artifactId = 'app'
 
-skyBuild(script: this) {
-  imgName = "${namespace}/${artifactId}"
+def deploymentname = "app"
+def namespace = "app-namespace"
+
+def getGitShortCommitId() {
+    sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
 }
 
-skyDeploy(script: this,
-    stageName: "Deploy TestEnv",
-    credInfo: "plat-test-ol@plat-dev-121") {
-    jkabsTask('task.id': 'kubectl_set',
-            'registry.url': "${imgHubQA}",
-            'image.name': "${namespace}/${artifactId}",
-            'build.pipeline.version': "${env.PIPELINE_VERSION}",
-            'k8s.deploymentname': "${devDeploymentname}",
-            'k8s.deployment.namespace': "${devNamespace}")
+node("autonline"){
+    stage("Checkout Code"){
+        checkout scm
+    }
+    stage("Set PIPELINE VERSION"){
+        env.PIPELINE_VERSION = "git${getGitShortCommitId()}.${env.BUILD_NUMBER}"
+        echo "Set Pipeline Version: ${env.PIPELINE_VERSION}"
+    }
+    stage("Build Image"){
+        container("dind"){
+            docker.withRegistry("https://${imgHubQA}", "imgbuild-harbor") {
+                imageName = "${imgNamespace}/${artifactId}:${env.PIPELINE_VERSION}"
+                harborImage = docker.build(imageName, ".")
+                harborImage.push()
+            }
+        }
+    }
+    stage("Deploy Cost-Ui"){
+        container("jnlp"){
+            withKubeConfig(caCertificate: '', credentialsId: "ops-business-cluster", serverUrl: '') {
+                jkabsTask('task.id': 'kubectl_set',
+                        'registry.url': "${imgHubQA}",
+                        'image.name': "${imgNamespace}/${artifactId}",
+                        'build.pipeline.version': "${env.PIPELINE_VERSION}",
+                        'k8s.deploymentname': "${deploymentname}",
+                        'k8s.deployment.namespace': "${namespace}")
+            }
+        }
+    }
 }
