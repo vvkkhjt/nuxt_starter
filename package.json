@@ -17,16 +17,16 @@
         "generate": "nuxt generate -c nuxt.prod.config.js"
     },
     "dependencies": {
-        "element-ui": "^2.1.0",
-        "nuxt": "^1.0.0",
-        "vuex-persistedstate": "^2.5.1"
-    },
-    "devDependencies": {
         "@nuxtjs/axios": "^5.1.1",
         "@nuxtjs/component-cache": "^1.1.1",
         "@nuxtjs/proxy": "^1.1.4",
+        "element-ui": "^2.1.0",
+        "nuxt": "^2.6.3",
+        "vuex-persistedstate": "^2.5.4"
+    },
+    "devDependencies": {
         "axios-retry": "3.0.2",
-        "vue-loader": "13.7.2",
+        "vue-loader": "^15.7.1",
         "webpack-merge": "^4.1.2"
     }
 }

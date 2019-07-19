@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { mapActions,mapGetters } from 'vuex'
 import AppLogo from "~/components/AppLogo.vue";
 export default {
     components: {
@@ -37,7 +38,15 @@ export default {
         //     console.log(res)
         // })
     },
+    methods:{
+        ...mapActions({
+            saveCurrentUser: "saveCurrentUser"
+        }),
+    },
     mounted() {
+        this.saveCurrentUser({
+            user: 'nuxt'
+        })
         // let params = {}
         // this.$axios.post('/api/user/loginQWX',params).then(res=>{
         //     console.log(res)
