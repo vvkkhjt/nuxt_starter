@@ -20,7 +20,7 @@
         "@nuxtjs/axios": "^5.1.1",
         "@nuxtjs/component-cache": "^1.1.1",
         "@nuxtjs/proxy": "^1.1.4",
-        "element-ui": "^2.1.0",
+        "element-ui": "~2.10.1",
         "nuxt": "^2.6.3",
         "vuex-persistedstate": "^2.5.4"
     },

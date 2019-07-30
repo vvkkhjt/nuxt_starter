@@ -1,52 +1,47 @@
 import qs from 'qs'
 import { Message, MessageBox } from 'element-ui';
 
-export default function ({ $axios, headers, redirect }) {
+export default function ({ $axios, headers, redirect,store }) {
     //设置headers
-    // headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
+    // headers['Content-Type'] = 'application/json;charset=utf-8'
     $axios.onRequest((config) => {
         config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
         config.data = qs.stringify(config.data)
     })
 
     $axios.onResponse(response => {
-        const res = response.data;
-        if (res.code < 0) {
-            // -211:无效的uid或token; -111:未登录;
-            if (res.code === -111 || res.code === -201 || res.code === -203 || res.code === -214) {
-                if(process.server){
-                    redirect('http://sso.digisky.com/login')
-                }else{
-                    MessageBox.alert('登录验证失效，请重新登录', '消息提示', {
-                        confirmButtonText: '确认',
-                        type: 'warning'
-                    }).then(() => {
-                        sessionStorage.removeItem('user');
-                        window.location.href = 'http://sso.digisky.com/login';
-                    }).catch(() => {
-                        sessionStorage.removeItem('user');
-                        location.reload();
-                    });
-                }
+        const data = response.data
+        if(data.hasOwnProperty('code') && data.code !== 200){
+            if(data.code === 401){
+                Message.error("登陆失效，前往登陆。。。")
+                setTimeout(()=>{
+                    redirect('/')
+                },1500)
             }else{
-                Message({
-                    message: res.msg,
-                    type: 'error',
-                    duration: 2 * 1000
-                });
-                return res;
+                let storeErrors = JSON.parse(JSON.stringify(store.state.errorLogs))
+                storeErrors.unshift({
+                    msg: data.message,
+                    time: new Date().toLocaleString()
+                })
+                store.dispatch("saveErrorLogs",storeErrors)
+                let e = new Error()
+                e.response = {}
+                e.response.status = data.code
+                e.response.statusText = data.message
+                e.message = data.message
+                throw e
             }
-        } else {
-            return response;
+        }else{
+            return data
         }
     })
 
     $axios.onError(error => {
-        const code = parseInt(error.response && error.response.status)
-        Message({
-            message: `${code}:${error}`,
-            type: 'error',
-            duration: 4 * 1000
-        });
+        let storeErrors = JSON.parse(JSON.stringify(store.state.errorLogs))
+        storeErrors.unshift({
+            msg: `${error.response.status}:${error.response.statusText}`,
+            time: new Date().toLocaleString()
+        })
+        store.dispatch("saveErrorLogs",storeErrors)
     })
 }
